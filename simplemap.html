@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Simple Map</title>
+
+<meta name="viewport" content="initial-scale=1.0">
+<meta charset="utf-8">
+<style>
+html, body {
+height: 100%;
+margin-left: 10;
+padding: 0;
+}
+#map {
+height: 600px;
+}
+.narrowchart{
+max-height:600px;
+overflow:auto;
+}
+.accordianheader {
+  color: #fff;
+  background: #1781B6 none repeat scroll 0% 0%;
+  padding: 10px 20px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.accordianbody {
+  background: #999;
+}
+
+i {
+  position: absolute;
+  right: 20px;
+  top: 14px;
+  -webkit-transition: all 300ms ease-in 0s;
+  -moz-transition: all 300ms ease-in 0s;
+  -o-transition: all 300ms ease-in 0s;
+  transition: all 300ms ease-in 0s;
+}
+
+.ui-state-active i {
+  color: #ACD4CE;
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+</head>
+<body>
+<div class="row">
+	<div class="col-md-9">
+		<div id="map"></div>
+	</div>
+	<div class="col-md-3">
+		<div class="narrowchart">
+			<div id="accordion">
+				<div class="accordianheader one">
+				<p>
+					Path 1 <i class="fa fa-angle-down"></i></p>
+				</div>
+				<div class="accordianbody">
+				<p> demo demo demo </p>
+				</div>
+				<div class="accordianheader one">
+				<p>
+					Path 2 <i class="fa fa-angle-down"></i></p>
+				</div>
+				<div class="accordianbody">
+				<p> demo demo demo </p>
+				</div>
+				<div class="accordianheader one">
+				<p>
+					Path 3<i class="fa fa-angle-down"></i></p>
+				</div>
+				<div class="accordianbody">
+				<p> demo demo demo </p>
+				</div>
+				<div class="accordianheader one">
+				<p>
+					Path 4<i class="fa fa-angle-down"></i></p>
+				</div>
+				<div class="accordianbody">
+				<p> demo demo demo </p>
+				</div>
+				<div class="accordianheader one">
+				<p>
+					Path 5<i class="fa fa-angle-down"></i></p>
+				</div>
+				<div class="accordianbody">
+				<p> demo demo demo </p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>	
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB_dQ07cu2-hF5SEt0pWxOVBZWvNT_o8UY&sensor=false"></script>
+
+
+<script>
+var stopping_points = [
+		{ "stops" : [
+				{
+					"pos" : "18.52064,73.8544",
+					"name" : "Pune City"
+				}, 
+				{
+					"pos" : "18.57889,73.90855",
+					"kind": "car",
+					"name": "Pune Airport"
+				}, 
+				{
+					"pos" : "32.1646,76.25924",
+					"kind": "flight",
+					"name": "Dharamsala Airport"
+				}, 
+				{
+					"pos" : "32.24546,77.18729",
+					"kind" : "car",
+					"name" : "Manali City"
+					
+				}
+			]
+		},
+		{ "stops" : [
+				{
+					"pos" : "18.52064,73.8544",
+					"name" : "Pune City"
+				},
+				{
+					"pos" : "18.57889,73.90855",
+					"kind": "car",
+					"name" : "Pune Airport"
+				},
+				{
+					"pos" : "30.6707,76.80212",
+					"kind": "flight",
+					"name" : "Chandigarh Airport",
+				}, 
+				{
+					"pos" : "30.71677,76.74377",
+					"kind": "car",
+					"name" : "Chandigarh Station"
+				},
+				{
+					"pos" : "32.24546,77.18729",
+					"kind": "bus",
+					"name" : "Manali City"
+				}
+			]
+		},
+		{ "stops" : [
+				{
+					"pos" : "18.52872,73.87495",
+					"name" : "Pune Station"
+				}, 
+				{
+					"pos" : "28.58229,77.25516",
+					"kind": "train",
+					"name" : "Jungpura Station"
+				}, 
+				{
+					"pos" : "28.61765,77.21208",
+					"kind": "train",
+					"name" : "Central Secretariat Station"
+				}, 
+				{
+					"pos" : "28.66849,77.22784",
+					"kind": "train",
+					"name" : "Delhi Station"
+				}, 
+				{
+					"pos" : "32.24424,77.18967",
+					"kind": "bus",
+					"name" : "Manali Station"	
+				}
+			]
+		},
+		{  "stops" : [
+				{
+					"pos" : "18.52794,73.8723",
+					"name" : "Pune City"
+				}, 
+				{
+					"pos" : "23.01611,72.5918",
+					"kind": "bus",
+					"name" : "Ahmedabad Station"
+				}, 
+				{
+					"pos" : "28.66849,77.22784",
+					"kind": "bus",
+					"name": "Delhi Station"
+				}, 
+				{
+					"pos" : "32.24424,77.18967",
+					"kind": "bus",
+					"name" : "Manali Station"
+				}
+			]
+		},
+		{  		"stops" : [
+				{
+					"pos" : "18.52064,73.8544",
+					"name" : "Pune City"
+				}, 
+				{
+					"pos" : "32.24546,77.18729",
+					"kind": "car",
+					"name" : "Manali City"
+				}
+			]
+		}
+	];
+
+	
+</script>
+
+<script>
+$(document).ready(function(){
+	var map;
+	var directionsService;
+	var markerArray = [];
+	var infoArray = [];
+	var infowindow;
+	var index = 3;
+	var count = 0;
+	var path;
+	var p = [];
+	var t = 0;
+	var display = [];
+	var latlong = new google.maps.LatLng(23.25, 77.416667); //sets the center of the map
+    var markers = [];
+	var flag;
+	map_initialize(); // load map on page initial load
+	
+	$(".one").click( function() {
+			var reference = $(this); 			//refers to the current clicked div
+			var i = reference.index()/2 ; 		//returns the index of the currently clicked div
+			count++;
+			calculateAndDisplayRoute(directionsService, markers, map,i);
+			
+	});
+	
+	function map_initialize() {
+		// Instantiate a directions service.
+		directionsService = new google.maps.DirectionsService;
+		var googleMapOptions = { 
+			center: latlong,
+			zoom: 5,		 
+			panControl: true,
+			zoomControl: true, 
+			zoomControlOptions: {
+			style: google.maps.ZoomControlStyle.SMALL 
+			},
+			scaleControl: true, 
+			mapTypeId: google.maps.MapTypeId.ROADMAP 
+		}; 
+		map = new google.maps.Map(document.getElementById("map"), googleMapOptions); 
+		
+		
+		calculateAndDisplayRoute(directionsService, markers, map,index);
+	}
+	
+	function calculateAndDisplayRoute(directionsService, markers, map,index) {
+		 //removing any existing routes from the map.
+		flag = false;
+		for (var i = 0; i < display.length; i++) {
+			display[i].setMap(null);
+		}
+		for (var i = 0; i < markerArray.length; i++) {
+			markerArray[i].setMap(null);
+			
+		}
+		
+		
+		for (var i=0;i<infoArray.length;i++) {
+			infoArray[i].close();
+			
+		}
+		for(var i = 0; i < p.length; i++){
+				p[i].setMap(null);
+		}
+			
+		
+		display = [];
+		var cent = {lat:0, lng:0};
+		for(var j = 0; j < stopping_points[index].stops.length-1; j++){
+			var start = stopping_points[index].stops[j].pos.split(",");
+		    var end = stopping_points[index].stops[j+1].pos.split(",");
+			var mode = stopping_points[index].stops[j+1].kind;
+			if((j+2) == stopping_points[index].stops.length){
+				flag = true;
+			}
+			
+			if(mode != 'flight'){
+				
+				drawdirection(start,end,mode,directionsService,map,markers);
+			}else{
+				drawPolyline(start,end,map,markers); //for flight path
+			}
+			
+		}
+		drawInfoWindow(index);
+		
+	}
+
+    function drawdirection(start,end,mode,directionsService,map,markers){
+		var startlat = start[0];
+		var startlng = start[1];
+		var endlat = end[0];
+		var endlng = end[1];
+		addMarkers(start,end);
+		var o = new google.maps.LatLng(startlat,startlng);
+		var d = new google.maps.LatLng(endlat,endlng);
+		var rendererOptions = {
+			map: map,
+			preserveViewport : true
+		}
+		
+		var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+		directionsDisplay.setMap(map);
+		directionsDisplay.setOptions( { suppressMarkers: true } );
+		
+		display.push(directionsDisplay);
+		directionsService.route({
+			origin: o,
+			destination: d,
+			travelMode: google.maps.TravelMode.DRIVING
+			}, function(response, status) {
+			
+			if (status === google.maps.DirectionsStatus.OK) {
+			  directionsDisplay.setDirections(response);
+			   	
+			} else {
+			  window.alert('Directions request failed due to ' + status);
+			}
+		});
+	}
+
+    
+
+    function drawPolyline(start,end,map,markers){
+		var route = addMarkers(start,end);
+		path = new google.maps.Polyline({
+			path: route,
+			strokeColor: "#ff0000",
+			strokeOpacity: 0.75,
+			strokeWeight: 5,
+			geodesic: true    
+		});
+		path.setMap(map);
+		p.push(path);
+	}	
+
+	function drawInfoWindow(index){
+		for(var j = 0; j < stopping_points[index].stops.length; j++){
+			var name = stopping_points[index].stops[j].name;
+			
+			infowindow = new google.maps.InfoWindow({
+				content: name,
+		    });
+			infowindow.open(map,markers[j]);
+			infoArray.push(infowindow);
+						
+		}
+		markers = [];
+	}
+
+	function addMarkers(start,end){
+		var route = [];
+        var x = {lat: 0, lng: 0};
+        x.lat = parseFloat(start[0]);
+		x.lng = parseFloat(start[1]);
+		route.push(x);
+		var y = {lat: 0, lng: 0};
+        y.lat = parseFloat(end[0]);
+		y.lng = parseFloat(end[1]);
+		route.push(y);
+		var m = new google.maps.Marker({
+			position: x,
+			map: map,
+	    });
+		markers.push(m);
+		markerArray.push(m);
+		var mm = new google.maps.Marker({
+			position: y,
+			map: map,
+	    });
+		markerArray.push(mm);
+		if(flag){
+			markers.push(mm);
+		}
+		return route;
+	}	
+});	
+
+</script>
+
+
+
+
+<script>
+	$("#accordion").accordion({
+      heightStyle: "content",
+      active:false,
+      collapsible: true,
+      header:"div.accordianheader"
+    });
+   </script>
+</body>
+</html>
